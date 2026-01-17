@@ -284,16 +284,71 @@ document.addEventListener("DOMContentLoaded", () => {
   const HOTEL_URL =
     "https://www.hotels.com/ho1885664576/hudson-valley-resort-kerhonkson-united-states-of-america/";
 
+  const checkInInput = form.querySelector('[name="checkIn"]');
+  const checkOutInput = form.querySelector('[name="checkOut"]');
+
+  // Real-time date validation
+  function validateDates() {
+    if (!checkInInput || !checkOutInput) return true;
+
+    const checkIn = new Date(checkInInput.value);
+    const checkOut = new Date(checkOutInput.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    // Clear previous error states
+    checkInInput.setCustomValidity("");
+    checkOutInput.setCustomValidity("");
+
+    if (checkInInput.value && checkIn < today) {
+      checkInInput.setCustomValidity("Check-in date cannot be in the past");
+      return false;
+    }
+
+    if (checkInInput.value && checkOutInput.value && checkOut <= checkIn) {
+      checkOutInput.setCustomValidity("Check-out date must be after check-in date");
+      return false;
+    }
+
+    return true;
+  }
+
+  // Set minimum dates
+  if (checkInInput) {
+    const today = new Date().toISOString().split("T")[0];
+    checkInInput.setAttribute("min", today);
+    checkInInput.addEventListener("change", validateDates);
+  }
+
+  if (checkOutInput) {
+    checkOutInput.addEventListener("change", validateDates);
+    // Update min when check-in changes
+    if (checkInInput) {
+      checkInInput.addEventListener("change", () => {
+        if (checkInInput.value) {
+          const nextDay = new Date(checkInInput.value);
+          nextDay.setDate(nextDay.getDate() + 1);
+          checkOutInput.setAttribute("min", nextDay.toISOString().split("T")[0]);
+        }
+      });
+    }
+  }
+
   form.addEventListener("submit", (e) => {
     e.preventDefault();
 
-    const checkIn = form.querySelector('[name="checkIn"]')?.value;
-    const checkOut = form.querySelector('[name="checkOut"]')?.value;
+    if (!validateDates()) {
+      form.reportValidity();
+      return;
+    }
+
+    const checkIn = checkInInput?.value;
+    const checkOut = checkOutInput?.value;
     let adults = +form.querySelector('[name="adults"]')?.value || 1;
     let children = +form.querySelector('[name="children"]')?.value || 0;
     let rooms = +form.querySelector('[name="rooms"]')?.value || 1;
 
-    if (!checkIn || !checkOut || checkOut <= checkIn) return;
+    if (!checkIn || !checkOut) return;
 
     adults = Math.max(adults, rooms);
 
@@ -335,13 +390,21 @@ document.querySelectorAll(".cool-gallery img").forEach((img) => {
   const images = Array.from(gallery.querySelectorAll("img"));
   const lightbox = document.getElementById("lightbox");
   const lightboxImg = document.getElementById("lightbox-img");
+
+  // Early return if lightbox elements don't exist
+  if (!lightbox || !lightboxImg) return;
+
   const btnClose = lightbox.querySelector(".lightbox-close");
   const btnPrev = lightbox.querySelector(".lightbox-prev");
   const btnNext = lightbox.querySelector(".lightbox-next");
 
+  // Additional safety check
+  if (!btnClose || !btnPrev || !btnNext) return;
+
   let currentIndex = 0;
 
   function openLightbox(index) {
+    if (index < 0 || index >= images.length) return;
     currentIndex = index;
     lightboxImg.src = images[currentIndex].src;
     lightbox.classList.add("active");

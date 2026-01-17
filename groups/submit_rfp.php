@@ -11,8 +11,8 @@ $subject = isset($_POST["subject"]) && trim($_POST["subject"]) !== ""
 
 // ✅ Simple honeypot (bots fill hidden fields)
 if (!empty($_POST["website"])) {
-  // Pretend success (don’t help spammers)
-  header("Location: request-for-proposal=1");
+  // Pretend success (don't help spammers)
+  header("Location: request-for-proposal.html?sent=1");
   exit;
 }
 function clean($v) {
@@ -38,12 +38,12 @@ $venues = count($venuesArr) ? implode(", ", $venuesArr) : "—";
 
 // ✅ Basic validation
 if ($name === "" || $email === "" || $phone === "" || $guests === "" || $dates === "" || $eventType === "") {
-  // You can redirect with error if you want; for now redirect back quietly.
-  header("Location: request-for-proposal=0");
+  // Redirect back with error status
+  header("Location: request-for-proposal.html?sent=0&error=missing_fields");
   exit;
 }
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-  header("Location: request-for-proposal=0");
+  header("Location: request-for-proposal.html?sent=0&error=invalid_email");
   exit;
 }
 

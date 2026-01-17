@@ -463,7 +463,7 @@ textarea {
   left: 0;
   min-width: 220px;
 
-  background: #8b2e2e;
+  background: var(--accent);
   border-radius: 0 0 var(--radius-medium) var(--radius-medium);
   box-shadow: var(--shadow-card);
 

@@ -11,6 +11,38 @@
       name="description"
       content="Experience Hudson Valley Resort & Spa in the Catskills, featuring accommodations, golf, spa services, weddings, conferences, and events just 90 miles from NYC."
     />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://hudsonvalleyresort.com/" />
+    <meta
+      property="og:title"
+      content="Hudson Valley Resort & Spa | Catskills Hotel, Golf & Spa Near NYC"
+    />
+    <meta
+      property="og:description"
+      content="Experience Hudson Valley Resort & Spa in the Catskills, featuring accommodations, golf, spa services, weddings, conferences, and events just 90 miles from NYC."
+    />
+    <meta property="og:image" content="https://hudsonvalleyresort.com/images/full.jpg" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="Hudson Valley Resort & Spa | Catskills Hotel, Golf & Spa Near NYC"
+    />
+    <meta
+      name="twitter:description"
+      content="Experience Hudson Valley Resort & Spa in the Catskills, featuring accommodations, golf, spa services, weddings, conferences, and events just 90 miles from NYC."
+    />
+    <meta
+      name="twitter:image"
+      content="https://hudsonvalleyresort.com/images/full.jpg"
+    />
+
+    <!-- Font optimization -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap"
@@ -583,7 +615,7 @@
                 </p>
 
                 <p>
-                  <a href="../amenities/amenities.html" class="employment-link"
+                  <a href="./amenities/amenities.html" class="employment-link"
                     >Amenities</a
                   >
                 </p>
@@ -663,5 +695,63 @@
     </footer>
 
     <script src="js/app.js" defer></script>
+
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Hotel",
+      "name": "Hudson Valley Resort & Spa",
+      "description": "Experience Hudson Valley Resort & Spa in the Catskills, featuring accommodations, golf, spa services, weddings, conferences, and events just 90 miles from NYC.",
+      "url": "https://hudsonvalleyresort.com",
+      "telephone": "+1-845-626-1166",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "400 Granite Road",
+        "addressLocality": "Kerhonkson",
+        "addressRegion": "NY",
+        "postalCode": "12446",
+        "addressCountry": "US"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "41.7831",
+        "longitude": "-74.2869"
+      },
+      "image": "https://hudsonvalleyresort.com/images/full.jpg",
+      "priceRange": "$$",
+      "starRating": {
+        "@type": "Rating",
+        "ratingValue": "4"
+      },
+      "amenityFeature": [
+        {
+          "@type": "LocationFeatureSpecification",
+          "name": "Golf Course",
+          "value": true
+        },
+        {
+          "@type": "LocationFeatureSpecification",
+          "name": "Spa",
+          "value": true
+        },
+        {
+          "@type": "LocationFeatureSpecification",
+          "name": "Conference Facilities",
+          "value": true
+        },
+        {
+          "@type": "LocationFeatureSpecification",
+          "name": "Wedding Venue",
+          "value": true
+        }
+      ],
+      "sameAs": [
+        "https://www.facebook.com/hudsonvalleyresort",
+        "http://pinterest.com/hvresortspa/",
+        "http://www.youtube.com/user/HudsonValleyResort"
+      ]
+    }
+    </script>
   </body>
 </html>
