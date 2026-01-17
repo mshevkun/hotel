@@ -155,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
   })();
 
   /* =========================================================
-     HERO SLIDER
+     HERO SLIDER (IMPROVED WITH ARROWS & TRANSITIONS)
   ========================================================= */
   (() => {
     const slider = document.querySelector("[data-slider]");
@@ -163,44 +163,142 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const slides = [...slider.querySelectorAll(".slide")];
     const dots = [...slider.querySelectorAll(".slider-pagination button")];
+    const prevBtn = slider.querySelector('[data-action="prev"]');
+    const nextBtn = slider.querySelector('[data-action="next"]');
 
-    let index = 0;
+    if (slides.length === 0) return;
+
+    let currentIndex = 0;
     let timer = null;
+    let isTransitioning = false;
     const INTERVAL = 5000;
+    const TRANSITION_DURATION = 500; // Match CSS transition duration
 
-    function setActive(i) {
-      slides.forEach((s, idx) => s.classList.toggle("is-active", idx === i));
-      dots.forEach((d, idx) => d.setAttribute("aria-current", idx === i));
-      index = i;
+    // Navigate to specific slide
+    function goToSlide(index) {
+      if (isTransitioning) return;
+      if (index < 0) index = slides.length - 1;
+      if (index >= slides.length) index = 0;
+
+      isTransitioning = true;
+
+      // Remove active class from current slide
+      slides[currentIndex].classList.remove("is-active");
+      dots[currentIndex]?.removeAttribute("aria-current");
+
+      // Add active class to new slide
+      currentIndex = index;
+      slides[currentIndex].classList.add("is-active");
+      dots[currentIndex]?.setAttribute("aria-current", "true");
+
+      // Reset transition lock after animation completes
+      setTimeout(() => {
+        isTransitioning = false;
+      }, TRANSITION_DURATION);
+
+      // Restart auto-play timer
+      startAutoPlay();
     }
 
-    function start() {
-      stop();
-      timer = setInterval(() => {
-        setActive((index + 1) % slides.length);
-      }, INTERVAL);
+    // Navigate to next slide
+    function nextSlide() {
+      goToSlide(currentIndex + 1);
     }
 
-    function stop() {
-      if (timer) clearInterval(timer);
-      timer = null;
+    // Navigate to previous slide
+    function prevSlide() {
+      goToSlide(currentIndex - 1);
     }
 
-    dots.forEach((dot) =>
-      dot.addEventListener("click", () => {
+    // Auto-play functionality
+    function startAutoPlay() {
+      stopAutoPlay();
+      timer = setInterval(nextSlide, INTERVAL);
+    }
+
+    function stopAutoPlay() {
+      if (timer) {
+        clearInterval(timer);
+        timer = null;
+      }
+    }
+
+    // Event listeners for navigation arrows
+    if (nextBtn) {
+      nextBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        nextSlide();
+      });
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        prevSlide();
+      });
+    }
+
+    // Event listeners for pagination dots
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", (e) => {
+        e.stopPropagation();
         const i = Number(dot.dataset.slide);
-        if (!Number.isNaN(i)) {
-          setActive(i);
-          start();
+        if (!Number.isNaN(i) && i !== currentIndex) {
+          goToSlide(i);
         }
-      })
-    );
+      });
+    });
 
-    slider.addEventListener("mouseenter", stop);
-    slider.addEventListener("mouseleave", start);
+    // Pause on hover
+    slider.addEventListener("mouseenter", stopAutoPlay);
+    slider.addEventListener("mouseleave", startAutoPlay);
 
-    setActive(0);
-    start();
+    // Touch/swipe support for mobile
+    let touchStartX = 0;
+    let touchEndX = 0;
+    const SWIPE_THRESHOLD = 50;
+
+    slider.addEventListener("touchstart", (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+
+    slider.addEventListener("touchend", (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+
+    function handleSwipe() {
+      const diff = touchStartX - touchEndX;
+      if (Math.abs(diff) > SWIPE_THRESHOLD) {
+        if (diff > 0) {
+          // Swipe left - next slide
+          nextSlide();
+        } else {
+          // Swipe right - previous slide
+          prevSlide();
+        }
+      }
+    }
+
+    // Keyboard navigation
+    slider.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        nextSlide();
+      }
+    });
+
+    // Make slider focusable for keyboard navigation
+    if (!slider.hasAttribute("tabindex")) {
+      slider.setAttribute("tabindex", "0");
+    }
+
+    // Initialize
+    goToSlide(0);
+    startAutoPlay();
   })();
 
   /* =========================================================
