@@ -1,0 +1,118 @@
+.feature-blocks {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.feature-item {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.feature-image {
+  width: 100%;
+  border-radius: 6px;
+  object-fit: cover;
+  max-height: 350px;
+}
+
+.feature-text h2 {
+  text-align: center;
+  font-size: 1.6rem;
+  margin-bottom: 10px;
+}
+
+.feature-text p {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Desktop layout: image left, text right */
+@media (min-width: 768px) {
+  .feature-item {
+    flex-direction: row;
+    align-items: center;
+    gap: 30px;
+  }
+  .feature-item:nth-child(even) {
+    flex-direction: row-reverse; /* alternating layout */
+  }
+  .feature-image {
+    width: 50%;
+    max-height: 300px;
+  }
+  .feature-text {
+    width: 50%;
+  }
+}
+
+
+ /* ======== GRID LAYOUT ======== */
+.attractions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+  margin-bottom: 3rem;
+}
+
+/* ======== PREMIUM CARD (NO IMAGES) ======== */
+.card {
+  display: block;
+  padding: 24px 22px;
+  border-radius: 14px;
+  text-decoration: none;
+  background: #ffffff;
+  color: #2a2a2a;
+
+  /* luxury depth */
+  box-shadow:
+    0 4px 12px rgba(0,0,0,0.08),
+    0 2px 4px rgba(0,0,0,0.06);
+
+  border: 1px solid rgba(0,0,0,0.05);
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+
+/* Hover effect */
+.card:hover {
+  transform: translateY(-6px);
+  background: #f9f9ff;
+  border-color: rgba(90,120,210,0.35);
+
+  box-shadow:
+    0 12px 26px rgba(0,0,0,0.12),
+    0 4px 10px rgba(0,0,0,0.08);
+}
+
+/* Title styling */
+.card h3 {
+  margin: 0 0 10px 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #1d1d1d;
+  letter-spacing: 0.3px;
+}
+
+/* Description styling */
+.card p {
+  margin: 0;
+  font-size: 0.95rem;
+  line-height: 1.45;
+  color: #4a4a4a;
+}
+
+/* Optional subtle hover text animation */
+.card:hover h3 {
+  color: #2447a3;
+}
+
+.card:hover p {
+  color: #555;
+}
